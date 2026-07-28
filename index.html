@@ -338,6 +338,9 @@ const DRIVE_LINKS = {
   "pbp-laporanpanen": "", "pbp-evaluasisiklus": "", "pbp-lpj": "",
 };
 
+// URL Aplikasi Web "Kehadiran Projek IPAS" (Apps Script)
+const APPS_SCRIPT_URL = "https://script.google.com/a/macros/guru.smk.belajar.id/s/AKfycby1AuF8-nTHPbtUWt8LlyWJIOm_ozm2nlS3K06v97FVM4GaPkci1fB4T9kagD8eOVt5/exec";
+
 /* =========================================================
    ICON SET — SVG Garis Minimalis Teknis
 ========================================================= */
@@ -389,10 +392,12 @@ const IPAS_DOCS = {
     {key:"rpp", icon:"book", tone:"tone-navy", title:"RPP / Modul Ajar", desc:"Rencana pelaksanaan tiap pertemuan."},
   ],
   "Pelaksanaan":[
-    {key:"jurnal", icon:"pencil", tone:"tone-toska", title:"Jurnal Mengajar", desc:"Agenda harian & catatan kegiatan KBM."},
+    {key:"jurnal", icon:"pencil", tone:"tone-toska", title:"Jurnal Mengajar", desc:"Agenda harian & catatan KBM — langsung isi di aplikasi.", external: APPS_SCRIPT_URL + "?tab=agenda"},
     {key:"lk", icon:"doc", tone:"tone-orange", title:"Lembar Kerja (LK/LKPD)", desc:"Lembar aktivitas peserta didik per pertemuan."},
-    {key:"presensi", icon:"users", tone:"tone-purple", title:"Presensi Siswa", desc:"Dashboard absensi live — Sheets & Apps Script.", external:"https://dinisilmi27tea.github.io/absensipipas/"},
+    {key:"presensi", icon:"users", tone:"tone-purple", title:"Presensi Siswa", desc:"Absensi harian — langsung isi di aplikasi.", external: APPS_SCRIPT_URL + "?tab=absen"},
     {key:"bahanajar", icon:"image", tone:"tone-navy", title:"Bahan Ajar / Media", desc:"Slide, video, atau media pendukung pembelajaran."},
+    {key:"kasus", icon:"clipboard", tone:"tone-purple", title:"Buku Kasus / Anecdotal", desc:"Catatan kasus & tindak lanjut siswa — langsung isi di aplikasi.", external: APPS_SCRIPT_URL + "?tab=kasus"},
+    {key:"dokumentasikbm", icon:"camera", tone:"tone-orange", title:"Dokumentasi KBM", desc:"Foto kegiatan pembelajaran — langsung upload di aplikasi.", external: APPS_SCRIPT_URL + "?tab=foto"},
   ],
   "Evaluasi":[
     {key:"rubrik", icon:"clipboard", tone:"tone-toska", title:"Rubrik Penilaian", desc:"Kriteria & skor penilaian tiap tugas/proyek."},
@@ -745,6 +750,18 @@ function render(){
     default: app.innerHTML = screenHome();
   }
 }
+
+// Deep-link balik dari aplikasi Apps Script (Kehadiran Projek IPAS)
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const program = params.get('program');
+  const tahun = params.get('tahun');
+  const sub = params.get('sub');
+  const tahap = params.get('tahap');
+  if (program && tahun && sub && tahap) {
+    state = { screen: 'docs', program, tahun, sub, tahap };
+  }
+})();
 
 // Inisialisasi Aplikasi
 render();
